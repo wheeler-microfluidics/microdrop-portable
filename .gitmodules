@@ -1,0 +1,3 @@
+[submodule "microdrop-app"]
+	path = microdrop-app
+	url = http://microfluidics.utoronto.ca/git/microdrop
