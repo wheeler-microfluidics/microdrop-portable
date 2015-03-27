@@ -62,10 +62,10 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         config_file_path = path(sys.argv[1]).abspath()
 
-    conf = Config(config_file_path)
+    conf = ConfigObj(config_file_path)
     choice = None
     try:
-        choice = conf.data['microdrop.app']['update_automatically']
+        choice = conf['microdrop.app']['update_automatically']
     except:
         pass
 
@@ -77,6 +77,11 @@ if __name__ == '__main__':
 
     update_version = get_pypi_version()
     current_version = get_current_version()
+    if current_version is None:
+        # `microdrop` package is not installed, so trigger installation of
+        # latest version.
+        print "update = %s" % get_pypi_version_string()
+        sys.exit(0)
 
     logging.info('current_version=%s, update_version=%s' %
                  (current_version, update_version))
@@ -84,7 +89,7 @@ if __name__ == '__main__':
                  (update_version.tags != current_version.tags))
     logging.debug('update_version <= current_version=%s' %
                  (update_version <= current_version))
-    logging.debug("choice == '''don't check for updates'''=%s" % 
+    logging.debug("choice == '''don't check for updates'''=%s" %
                  (choice == '''don't check for updates'''))
     if update_version.tags != current_version.tags or \
     update_version <= current_version or \
