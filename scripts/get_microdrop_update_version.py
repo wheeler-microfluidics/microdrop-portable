@@ -7,16 +7,19 @@ import gtk
 
 from microdrop_utility import Version
 from microdrop_utility.gui import yesno
-from microdrop.config import Config;
-from path_helpers import path;
+from configobj import ConfigObj
+from path_helpers import path
 
 
 def get_pypi_version_string():
 # get the latest version on pypi
-    name, version = subprocess.Popen(['python-2.7.9\Scripts\yolk.exe','-V', 'microdrop'],
+    name, version = (subprocess.Popen(['python-2.7.9\python.exe',
+                                      'python-2.7.9\Scripts\yolk-script.py','-V',
+                                      'microdrop'],
                                      stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE,
-                                     stdin=subprocess.PIPE).communicate()[0].rstrip().split(' ')
+                                     stdin=subprocess.PIPE).communicate()[0]
+                     .rstrip().split(' '))
     return version
 
 def get_pypi_version():
@@ -26,7 +29,9 @@ def get_pypi_version():
     return version_from_re(m)
 
 def get_current_version():
-    output = subprocess.Popen(['python-2.7.9\Scripts\yolk.exe','-lm', 'microdrop', '-f', 'version'],
+    output = subprocess.Popen(['python-2.7.9\python.exe',
+                               'python-2.7.9\Scripts\yolk-script.py', '-lm',
+                               'microdrop', '-f', 'version'],
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE,
                                stdin=subprocess.PIPE).communicate()[0].splitlines()
